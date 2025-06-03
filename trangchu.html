@@ -121,97 +121,107 @@
         <button class="btn secondary" id="resetSelectionBtn">Đặt lại lựa chọn</button>
     </div>
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
             const pageTitle = document.getElementById('pageTitle');
             const currentSelectionSpan = document.getElementById('currentSelection');
             const changeSelectionBtn = document.getElementById('changeSelectionBtn');
-            const lessonLearningPath = document.getElementById('lessonLearningPath'); // Đổi id để phù hợp với learning path
+            const lessonLearningPath = document.getElementById('lessonLearningPath');
             const resetSelectionBtn = document.getElementById('resetSelectionBtn');
-            const startLessonBtn = document.getElementById('startLessonBtn'); // Nút bắt đầu bài học (có thể ẩn hoặc dùng lại)
+            const startLessonBtn = document.getElementById('startLessonBtn'); // Nút này vẫn tồn tại nhưng sẽ bị ẩn
 
             const savedPart = localStorage.getItem('selectedPart');
             const savedClass = localStorage.getItem('selectedClass');
 
-            // Định nghĩa dữ liệu bài học với trạng thái giả định (ví dụ: 'completed', 'current', 'locked')
-            const lessonData = {
-                'xung-toi': {
-                    name: 'Xưng Tội',
-                    lessons: [ // Đổi sang format 'lessons' để đồng bộ với hoc.html
-                        { id: 'xt1', title: 'Bài 1: Thiên Chúa Là Ai?', desc: 'Tìm hiểu về Thiên Chúa, Đấng tạo hóa muôn vật.', status: 'current' },
-                        { id: 'xt2', title: 'Bài 2: Tội Là Gì?', desc: 'Hiểu về bản chất của tội lỗi và hậu quả.', status: 'locked' },
-                        { id: 'xt3', title: 'Bài 3: Bí Tích Giải Tội', desc: 'Ý nghĩa và cách lãnh nhận Bí Tích Giải Tội.', status: 'locked' },
-                        { id: 'xt4', title: 'Bài 4: Lương Tâm Và Tự Do', desc: 'Phân biệt thiện ác và ý nghĩa của tự do.', status: 'locked' },
-                        { id: 'xt5', title: 'Bài 5: Các Điều Răn Chúa', desc: 'Nghiên cứu sâu hơn về Mười Điều Răn.', status: 'locked' },
-                        { id: 'xt6', title: 'Bài 6: Ăn Năn Sám Hối', desc: 'Tầm quan trọng của lòng ăn năn và việc sám hối.', status: 'locked' },
-                        { id: 'xt7', title: 'Bài 7: Examination of Conscience', desc: 'Cách xét mình trước khi xưng tội.', status: 'locked' },
-                        { id: 'xt8', title: 'Bài 8: The Rite of Confession', desc: 'Quy trình và nghi thức Bí Tích Giải Tội.', status: 'locked' },
-                        { id: 'xt9', title: 'Bài 9: Living a Renewed Life', desc: 'Sống một đời sống mới sau Giải Tội.', status: 'locked' }
-                    ]
-                },
-                'them-suc': {
-                    name: 'Thêm Sức',
-                    lessons: [
-                        { id: 'ts1', title: 'Bài 1: Chúa Thánh Thần', desc: 'Tìm hiểu về Ngôi Ba Thiên Chúa.', status: 'completed' },
-                        { id: 'ts2', title: 'Bài 2: Bảy Ơn Chúa Thánh Thần', desc: 'Khám phá các ơn đặc biệt Chúa ban.', status: 'current' },
-                        { id: 'ts3', title: 'Bài 3: Biểu Tượng Chúa Thánh Thần', desc: 'Các biểu tượng của Chúa Thánh Thần.', status: 'locked' },
-                        { id: 'ts4', title: 'Bài 4: Sứ Vụ Của Kitô Hữu', desc: 'Vai trò của người Kitô hữu trong thế giới.', status: 'locked' },
-                        { id: 'ts5', title: 'Bài 5: Bí Tích Thêm Sức', desc: 'Ý nghĩa và nghi thức Bí Tích Thêm Sức.', status: 'locked' },
-                        { id: 'ts6', title: 'Bài 6: Sống Với Ơn Thánh Thần', desc: 'Cách sống và phát triển Ơn Chúa Thánh Thần.', status: 'locked' },
-                        { id: 'ts7', title: 'Bài 7: Prophets and Mission', desc: 'Vai trò của các tiên tri và sứ mệnh của Kitô hữu.', status: 'locked' },
-                        { id: 'ts8', title: 'Bài 8: The Fruits of the Holy Spirit', desc: 'Những hoa trái của Chúa Thánh Thần.', status: 'locked' },
-                        { id: 'ts9', title: 'Bài 9: Serving the Community', desc: 'Phục vụ cộng đồng và truyền giáo.', status: 'locked' }
-                    ]
-                },
-                'song-dao': {
-                    name: 'Sống Đạo',
-                    lessons: [
-                        { id: 'sd1', title: 'Bài 1: Sống Đức Tin', desc: 'Đức tin là gì và làm sao để sống Đức Tin.', status: 'current' },
-                        { id: 'sd2', title: 'Bài 2: Sống Đức Cậy', desc: 'Hy vọng vào Chúa và cuộc sống vĩnh cửu.', status: 'locked' },
-                        { id: 'sd3', title: 'Bài 3: Sống Đức Mến', desc: 'Tình yêu đối với Thiên Chúa và tha nhân.', status: 'locked' },
-                        { id: 'sd4', title: 'Bài 4: Cầu Nguyện', desc: 'Các hình thức và tầm quan trọng của cầu nguyện.', status: 'locked' },
-                        { id: 'sd5', title: 'Bài 5: Các Bí Tích', desc: 'Tìm hiểu về các Bí Tích trong Giáo Hội.', status: 'locked' },
-                        { id: 'sd6', title: 'Bài 6: Phụng Vụ', desc: 'Ý nghĩa và vai trò của Phụng Vụ.', status: 'locked' },
-                        { id: 'sd7', title: 'Bài 7: Social Justice', desc: 'Công bằng xã hội và giáo huấn xã hội của Giáo Hội.', status: 'locked' },
-                        { id: 'sd8', title: 'Bài 8: Stewardship', desc: 'Trách nhiệm quản lý các ơn Chúa ban.', status: 'locked' },
-                        { id: 'sd9', title: 'Bài 9: Evangelization in Daily Life', desc: 'Loan báo Tin Mừng trong đời sống thường ngày.', status: 'locked' }
-                    ]
-                }
-            };
-            
-            let activePopup = null; // Biến để theo dõi pop-up đang mở
+            let currentPartData = null; // Biến này sẽ lưu dữ liệu của phần hiện tại
 
-            // Hàm để đóng pop-up đang mở
+            // Hàm tải dữ liệu bài học cho phần đã chọn
+            async function loadLessonDataForPart(partKey) {
+                try {
+                    const response = await fetch(`data/${partKey}_data.json`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error(`Could not load lesson data for part ${partKey}:`, error);
+                    return null;
+                }
+            }
+
+            // Hàm khởi tạo/cập nhật tiến độ người dùng
+            function initializeUserProgress(partKey, initialLessonData) {
+                let userProgress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+                userProgress[partKey] = userProgress[partKey] || {}; // Đảm bảo có đối tượng cho phần này
+
+                let updatedLessons = JSON.parse(JSON.stringify(initialLessonData.lessons)); // Tạo bản sao sâu để không ảnh hưởng dữ liệu gốc
+
+                let needsUpdateAndSave = false;
+
+                if (Object.keys(userProgress[partKey]).length === 0) {
+                    // Nếu chưa có tiến độ nào cho phần này, đặt bài đầu tiên là 'current'
+                    if (updatedLessons.length > 0) {
+                        updatedLessons[0].status = 'current';
+                        userProgress[partKey][updatedLessons[0].id] = 'current';
+                        needsUpdateAndSave = true;
+                    }
+                } else {
+                    // Áp dụng tiến độ đã lưu
+                    updatedLessons.forEach(lesson => {
+                        if (userProgress[partKey][lesson.id]) {
+                            lesson.status = userProgress[partKey][lesson.id];
+                        }
+                    });
+                }
+                
+                // Đảm bảo không có bài nào đang 'locked' nếu bài trước đó đã 'completed'
+                for (let i = 0; i < updatedLessons.length; i++) {
+                    if (i > 0 && updatedLessons[i-1].status === 'completed' && updatedLessons[i].status === 'locked') {
+                         updatedLessons[i].status = 'current';
+                         userProgress[partKey][updatedLessons[i].id] = 'current';
+                         needsUpdateAndSave = true;
+                    }
+                }
+
+
+                if (needsUpdateAndSave) {
+                    localStorage.setItem('userProgress', JSON.stringify(userProgress));
+                }
+
+                return updatedLessons;
+            }
+
+
+            let activePopup = null;
+
             function closeActivePopup() {
                 if (activePopup) {
                     activePopup.classList.remove('show');
-                    activePopup.parentNode.classList.remove('has-popup'); // Xóa class kích hoạt popup trên wrapper
+                    activePopup.parentNode.classList.remove('has-popup');
                     activePopup = null;
                 }
             }
 
-            // Lắng nghe sự kiện click trên toàn bộ body để đóng pop-up khi click ra ngoài
             document.body.addEventListener('click', (event) => {
                 if (activePopup && !activePopup.contains(event.target) && !event.target.closest('.lesson-node')) {
                     closeActivePopup();
                 }
             });
 
-            // Hàm render con đường học tập
             function renderLearningPath(partKey, classNum) {
-                const partInfo = lessonData[partKey]; // Lấy thông tin part từ lessonData
-                if (!partInfo) {
+                if (!currentPartData) {
                     pageTitle.textContent = "Không tìm thấy Phần Học";
-                    lessonLearningPath.innerHTML = "<p>Phần học bạn chọn không hợp lệ.</p>";
+                    lessonLearningPath.innerHTML = "<p>Phần học bạn chọn không hợp lệ hoặc dữ liệu không tải được.</p>";
                     return;
                 }
 
-                // Tiêu đề trang sẽ là tên Phần Học và số Lớp (ví dụ: "Xưng Tội - Lớp 3")
-                pageTitle.textContent = `${partInfo.name} Lớp ${classNum}`;
-                currentSelectionSpan.textContent = `Bạn đang học: ${partInfo.name} Lớp ${classNum}`;
-                lessonLearningPath.innerHTML = ''; // Xóa nội dung cũ
+                // Áp dụng tiến độ người dùng vào dữ liệu bài học trước khi render
+                const lessonsToDisplay = initializeUserProgress(partKey, currentPartData);
 
-                const lessonsToDisplay = partInfo.lessons;
+                pageTitle.textContent = `${currentPartData.name} Lớp ${classNum}`;
+                currentSelectionSpan.textContent = `Bạn đang học: ${currentPartData.name} Lớp ${classNum}`;
+                lessonLearningPath.innerHTML = '';
 
                 lessonsToDisplay.forEach((lesson, index) => {
                     const lessonNodeWrapper = document.createElement('div');
@@ -219,10 +229,9 @@
 
                     const lessonNode = document.createElement('div');
                     lessonNode.classList.add('lesson-node');
-                    lessonNode.dataset.lessonId = lesson.id; // Lưu ID bài học
-                    lessonNode.dataset.lessonStatus = lesson.status; // Lưu trạng thái
+                    lessonNode.dataset.lessonId = lesson.id;
+                    lessonNode.dataset.lessonStatus = lesson.status; // Sử dụng status đã được cập nhật
 
-                    // Thêm class cho trạng thái
                     if (lesson.status === 'current') {
                         lessonNode.classList.add('current');
                     } else if (lesson.status === 'completed') {
@@ -231,20 +240,20 @@
                         lessonNode.classList.add('locked');
                     }
 
-                    const nodeNumber = document.createElement('div');
-                    nodeNumber.classList.add('lesson-node-number');
-                    nodeNumber.textContent = index + 1; // Số thứ tự bài học
+                    if (lesson.status !== 'completed') {
+                        const nodeNumber = document.createElement('div');
+                        nodeNumber.classList.add('lesson-node-number');
+                        nodeNumber.textContent = index + 1;
+                        lessonNode.appendChild(nodeNumber);
 
-                    const nodeText = document.createElement('div');
-                    nodeText.classList.add('lesson-node-text');
-                    // Hiển thị phần tên bài học trước dấu hai chấm, hoặc toàn bộ nếu không có
-                    nodeText.textContent = lesson.title.split(':')[0].trim();
+                        const nodeText = document.createElement('div');
+                        nodeText.classList.add('lesson-node-text');
+                        nodeText.textContent = lesson.title.split(':')[0].trim();
+                        lessonNode.appendChild(nodeText);
+                    }
 
-                    lessonNode.appendChild(nodeNumber);
-                    lessonNode.appendChild(nodeText);
                     lessonNodeWrapper.appendChild(lessonNode);
-                    
-                    // Tạo pop-up cho mỗi node
+
                     const popup = document.createElement('div');
                     popup.classList.add('lesson-info-popup');
                     popup.innerHTML = `
@@ -256,23 +265,27 @@
 
                     lessonLearningPath.appendChild(lessonNodeWrapper);
 
-                    // Xử lý sự kiện click cho từng node bài học
                     lessonNode.addEventListener('click', (event) => {
-                        event.stopPropagation(); // Ngăn chặn sự kiện click lan ra body
-
-                        closeActivePopup(); // Đóng pop-up đang mở nếu có
+                        event.stopPropagation();
+                        closeActivePopup();
 
                         if (lesson.status === 'locked') {
                             alert('Bài học này đang bị khóa. Vui lòng hoàn thành các bài trước.');
                             return;
                         }
 
-                        // Hiển thị pop-up cho node này
-                        popup.classList.add('show');
-                        lessonNodeWrapper.classList.add('has-popup'); // Thêm class vào wrapper để định vị popup
-                        activePopup = popup; // Đặt pop-up này là pop-up đang hoạt động
+                        if (lesson.status === 'completed') {
+                             // Bạn có thể thêm một thông báo nhẹ hoặc không làm gì
+                             // alert('Bài học này đã hoàn thành!');
+                             // Hoặc cho phép người dùng click để ôn tập
+                             // window.location.href = `lesson-detail.html?part=${partKey}&class=${classNum}&lesson=${lesson.id}`;
+                             return; 
+                        }
 
-                        // Đăng ký sự kiện click cho nút "BẮT ĐẦU" trong pop-up
+                        popup.classList.add('show');
+                        lessonNodeWrapper.classList.add('has-popup');
+                        activePopup = popup;
+
                         const startBtnPopup = popup.querySelector('.start-lesson-btn-popup');
                         startBtnPopup.onclick = () => {
                             localStorage.setItem('currentLessonId', lesson.id);
@@ -281,44 +294,54 @@
                     });
                 });
 
-                // Tự động cuộn đến bài đang học nếu có
                 const currentLessonNode = document.querySelector('.lesson-node.current');
                 if (currentLessonNode) {
                     currentLessonNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
 
+            async function initializePage() {
+                if (savedPart && savedClass) {
+                    const loaded = await loadLessonDataForPart(savedPart);
+                    if (loaded) {
+                        currentPartData = loaded; // Lưu dữ liệu phần đã tải
+                        renderLearningPath(savedPart, savedClass);
+                    } else {
+                        // Xử lý trường hợp không tải được dữ liệu
+                        pageTitle.textContent = "Lỗi tải dữ liệu";
+                        lessonLearningPath.innerHTML = "<p>Không thể tải dữ liệu cho phần học này. Vui lòng thử lại hoặc đặt lại lựa chọn.</p>";
+                        changeSelectionBtn.style.display = 'none';
+                        startLessonBtn.style.display = 'none';
+                    }
+                } else {
+                    pageTitle.textContent = "Chào mừng!";
+                    currentSelectionSpan.textContent = "Bạn chưa chọn ngành và lớp học.";
+                    lessonLearningPath.innerHTML = `
+                        <p>Vui lòng <a href="landau.html">chọn ngành và lớp</a> để bắt đầu học.</p>
+                    `;
+                    changeSelectionBtn.style.display = 'none';
+                    startLessonBtn.style.display = 'none';
+                }
 
-            if (savedPart && savedClass) {
-                renderLearningPath(savedPart, savedClass);
-            } else {
-                pageTitle.textContent = "Chào mừng!";
-                currentSelectionSpan.textContent = "Bạn chưa chọn ngành và lớp học.";
-                lessonLearningPath.innerHTML = `
-                    <p>Vui lòng <a href="landau.html">chọn ngành và lớp</a> để bắt đầu học.</p>
-                `;
-                changeSelectionBtn.style.display = 'none'; // Ẩn nút nếu chưa có lựa chọn
-                startLessonBtn.style.display = 'none'; // Ẩn nút bắt đầu bài học (nếu có)
+                changeSelectionBtn.addEventListener('click', () => {
+                    window.location.href = 'landau.html';
+                });
+
+                resetSelectionBtn.addEventListener('click', () => {
+                    localStorage.removeItem('selectedPart');
+                    localStorage.removeItem('selectedClass');
+                    localStorage.removeItem('userProgress'); // Xóa cả tiến độ khi reset
+                    alert('Lựa chọn đã được đặt lại. Bạn sẽ được chuyển hướng đến trang chọn ngành/lớp.');
+                    window.location.href = 'landau.html';
+                });
+
+                if(startLessonBtn) {
+                    startLessonBtn.style.display = 'none';
+                }
             }
 
-            // Nút "Đổi ngành/lớp" (trên info-bar)
-            changeSelectionBtn.addEventListener('click', () => {
-                window.location.href = 'landau.html'; // Chuyển về trang chọn ngành/lớp
-            });
-
-            // Nút "Đặt lại lựa chọn" (dưới cùng)
-            resetSelectionBtn.addEventListener('click', () => {
-                localStorage.removeItem('selectedPart');
-                localStorage.removeItem('selectedClass');
-                alert('Lựa chọn đã được đặt lại. Bạn sẽ được chuyển hướng đến trang chọn ngành/lớp.');
-                window.location.href = 'landau.html'; // Chuyển về trang chọn ngành/lớp
-            });
-
-            // Nút startLessonBtn ở dưới cùng sẽ không còn được sử dụng
-            // Đảm bảo nó bị ẩn đi
-            if(startLessonBtn) {
-                startLessonBtn.style.display = 'none';
-            }
+            // Bắt đầu khởi tạo trang
+            initializePage();
         });
     </script>
 </body>

@@ -63,7 +63,7 @@
         <button class="continue-btn" id="continueButton" disabled>TIẾP TỤC</button>
     </div>
 
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', () => {
             const lessonPageTitle = document.getElementById('lessonPageTitle');
             const lessonMainTitle = document.getElementById('lessonMainTitle');
@@ -74,146 +74,25 @@
             const feedbackMessage = document.getElementById('feedbackMessage');
             const xpDisplay = document.getElementById('xpDisplay');
 
-            // Dữ liệu giả định cho nội dung từng bài học
-            const allLessonsContent = {
-                'xung-toi': {
-                    'xt1': {
-                        title: 'Bài 1: Em học giáo lý',
-                        sections: [
-                            {
-                                type: 'word-of-god-display',
-                                content: '“Phúc cho kẻ nghe Lời Thiên Chúa và đem ra thực hành” (Lc 11,28)',
-                                desc: 'Lời Chúa mời gọi chúng ta lắng nghe và thực hành Lời Người trong đời sống hằng ngày.'
-                            },
-                            {
-                                type: 'multiple-choice',
-                                question: 'Mục đích chính của việc học giáo lý là gì?',
-                                options: [
-                                    { text: 'Để biết nhiều điều', correct: false },
-                                    { text: 'Để biết Thiên Chúa là Cha và mọi người là anh chị em', correct: true },
-                                    { text: 'Để đi lễ nhà thờ', correct: false },
-                                    { text: 'Để được khen ngợi', correct: false }
-                                ],
-                                feedback_correct: 'Chính xác! Học giáo lý giúp chúng ta hiểu về mối quan hệ của mình với Thiên Chúa và tha nhân.',
-                                feedback_incorrect: 'Hãy suy nghĩ lại. Mục đích chính của việc học giáo lý là để biết về Thiên Chúa và mối quan hệ của chúng ta với Người.'
-                            },
-                            {
-                                type: 'fill-in-blank',
-                                question_before: 'Khi biết Thiên Chúa là Cha và mọi người là anh chị em, em sẽ làm gì?',
-                                blank_start_text: 'Em biết như thế để ',
-                                blank_correct_answer: 'mến Chúa, yêu người',
-                                blank_end_text: ', cho ngày sau được hưởng phúc đời đời.',
-                                hint: 'Hãy nhớ về hành động cần làm khi biết về Chúa và tha nhân.',
-                                feedback_correct: 'Tuyệt vời! Chúng ta yêu mến Chúa và yêu thương mọi người.',
-                                feedback_incorrect: 'Gần đúng! Hãy nhớ rằng, biết Thiên Chúa là Cha và mọi người là anh chị em giúp chúng ta yêu mến Chúa và yêu thương tha nhân.'
-                            },
-                            {
-                                type: 'summary',
-                                title: 'Tóm tắt bài học',
-                                content: 'Bài học này giúp chúng ta hiểu rằng học giáo lý không chỉ là tiếp thu kiến thức mà còn là để nhận ra tình yêu của Thiên Chúa và áp dụng vào đời sống, thể hiện qua việc yêu mến Chúa và yêu thương anh chị em.'
-                            }
-                        ]
-                    },
-                    'xt2': {
-                        title: 'Bài 2: Tội Là Gì?',
-                        sections: [
-                            { type: 'paragraph', content: 'Tội lỗi là sự bất tuân Lời Chúa, là xa cách tình yêu của Ngài.' },
-                            { type: 'paragraph', content: 'Khi phạm tội, chúng ta làm tổn thương mối quan hệ với Thiên Chúa và với anh chị em.' },
-                            { type: 'heading3', content: 'Các loại tội' },
-                            { type: 'list', items: ['Tội trọng: Cố ý phạm điều răn Chúa trong những việc quan trọng.', 'Tội nhẹ: Phạm điều răn Chúa trong những việc kém quan trọng hoặc không đủ ý thức.'] },
-                            { type: 'paragraph', content: 'Hiểu rõ về tội lỗi giúp chúng ta nhận ra sự cần thiết của Bí tích Hòa Giải.' }
-                        ]
-                    },
-                    'xt3': {
-                        title: 'Bài 3: Bí Tích Giải Tội',
-                        sections: [
-                            { type: 'paragraph', content: 'Bí tích Hòa Giải được thực hiện qua việc xưng tội với Linh mục.' },
-                            { type: 'paragraph', content: 'Linh mục là người đại diện Chúa để tha thứ tội lỗi cho chúng ta.' },
-                            { type: 'heading3', content: 'Các bước xưng tội' },
-                            { type: 'list', items: ['Xét mình: Nhớ lại những tội đã phạm.', 'Ăn năn tội.', 'Quyết tâm chừa tội.', 'Xưng tội với Linh mục.', 'Nhận lời khuyên và đền tội.'] },
-                            { type: 'paragraph', content: 'Hãy đến với Bí tích thường xuyên để tâm hồn được thanh tẩy.' }
-                        ]
-                    }
-                },
-                'them-suc': {
-                    'ts1': {
-                        title: 'Bài 1: Chúa Thánh Thần',
-                        sections: [
-                            { type: 'paragraph', content: 'Chúa Thánh Thần là Ngôi Ba Thiên Chúa, Đấng ban sự sống.' },
-                            { type: 'paragraph', content: 'Ngài hiện diện và hoạt động trong Hội Thánh và trong mỗi người Kitô hữu.' }
-                        ]
-                    },
-                    'ts2': {
-                        title: 'Bài 2: Ân sủng Thánh Thần',
-                        sections: [
-                            { type: 'paragraph', content: 'Bí tích Thêm Sức ban ân sủng đặc biệt của Chúa Thánh Thần.' },
-                            { type: 'paragraph', content: 'Các ân sủng giúp chúng ta sống mạnh mẽ hơn trong đức tin.' }
-                        ]
-                    },
-                    'ts3': {
-                        title: 'Bài 3: Nghi thức Thêm Sức',
-                        sections: [
-                            { type: 'paragraph', content: 'Nghi thức Thêm Sức được cử hành bởi Giám mục.' },
-                            { type: 'paragraph', content: 'Chúng ta được xức dầu Thánh và lãnh nhận ấn tín Thánh Thần.' }
-                        ]
-                    }
-                },
-                'song-dao': {
-                    'sd1': {
-                        title: 'Bài 1: Mười Điều Răn',
-                        sections: [
-                            { type: 'paragraph', content: 'Mười Điều Răn là nền tảng của đời sống luân lý Kitô giáo.' },
-                            { type: 'paragraph', content: 'Chúng ta được mời gọi tuân giữ để sống đẹp lòng Chúa.' }
-                        ]
-                    },
-                    'sd2': {
-                        title: 'Bài 2: Giữ các Giới răn',
-                        sections: [
-                            { type: 'paragraph', content: 'Giữ các Giới răn không phải là gánh nặng mà là con đường dẫn đến hạnh phúc.' },
-                            { type: 'paragraph', content: 'Thiên Chúa ban Giới răn vì Ngài yêu thương chúng ta.' }
-                        ]
-                    },
-                    'sd3': {
-                        title: 'Bài 3: Thực hành Bác ái',
-                        sections: [
-                            { type: 'paragraph', content: 'Bác ái là giới răn quan trọng nhất, tóm gọn mọi giới răn khác.' },
-                            { type: 'paragraph', content: 'Chúng ta thực hành bác ái qua việc yêu thương Thiên Chúa và yêu thương tha nhân.' }
-                        ]
-                    }
-                }
-            };
-
-            // Định nghĩa lessonData chính xác (tương tự như trong trangchu.html / hoc.html để lấy tên phần học)
-            const globalLessonStructure = {
-                'xung-toi': {
-                    name: 'Xưng Tội',
-                    lessons: [
-                        { id: 'xt1', title: 'Bài 1: Thiên Chúa Là Ai?', desc: '' },
-                        { id: 'xt2', title: 'Bài 2: Tội Là Gì?', desc: '' },
-                        { id: 'xt3', title: 'Bài 3: Bí Tích Giải Tội', desc: '' }
-                    ]
-                },
-                'them-suc': {
-                    name: 'Thêm Sức',
-                    lessons: [
-                        { id: 'ts1', title: 'Bài 1: Chúa Thánh Thần', desc: '' },
-                        { id: 'ts2', title: 'Bài 2: Bảy Ơn Chúa Thánh Thần', desc: '' },
-                        { id: 'ts3', title: 'Bài 3: Biểu Tượng Chúa Thánh Thần', desc: '' }
-                    ]
-                },
-                'song-dao': {
-                    name: 'Sống Đạo',
-                    lessons: [
-                        { id: 'sd1', title: 'Bài 1: Sống Đức Tin', desc: '' },
-                        { id: 'sd2', title: 'Bài 2: Sống Đức Cậy', desc: '' },
-                        { id: 'sd3', title: 'Bài 3: Sống Đức Mến', desc: '' }
-                    ]
-                }
-            };
-
             let currentLessonSections = [];
             let currentSectionIndex = 0;
             let xpGained = 0;
+            let currentPartName = ''; // Biến để lưu tên phần học (Xưng Tội, Thêm Sức, Sống Đạo)
+
+            // Hàm tải dữ liệu bài học cho phần đã chọn
+            async function loadLessonDataForPart(partKey) {
+                try {
+                    const response = await fetch(`data/${partKey}_data.json`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error(`Could not load lesson data for part ${partKey}:`, error);
+                    return null;
+                }
+            }
 
             function updateProgressBar() {
                 const progress = ((currentSectionIndex) / currentLessonSections.length) * 100;
@@ -225,14 +104,14 @@
                 feedbackMessage.classList.remove('correct', 'incorrect');
                 feedbackMessage.classList.add(isCorrect ? 'correct' : 'incorrect');
                 feedbackMessage.classList.add('show');
-                
+
                 if (isCorrect) {
                     xpDisplay.style.display = 'block';
                 } else {
                     xpDisplay.style.display = 'none';
                 }
 
-                continueButton.disabled = false;
+                continueButton.disabled = false; // Đảm bảo nút được bật
             }
 
             function hideFeedback() {
@@ -249,12 +128,46 @@
 
             function renderCurrentSection() {
                 lessonContentArea.innerHTML = '';
-                continueButton.disabled = true;
+                continueButton.disabled = true; // Vô hiệu hóa nút khi render section mới
+                continueButton.textContent = "TIẾP TỤC"; // Đặt lại text nút
 
-                // Cập nhật thanh tiến trình trước khi render section mới (để nó phản ánh trạng thái SẮP tới)
                 updateProgressBar();
 
                 if (currentSectionIndex >= currentLessonSections.length) {
+                    // === LƯU TIẾN ĐỘ VÀ MỞ KHÓA BÀI TIẾP THEO ===
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const partKey = urlParams.get('part');
+                    const lessonId = urlParams.get('lesson');
+
+                    // Lấy tiến độ hiện tại từ localStorage
+                    let userProgress = JSON.parse(localStorage.getItem('userProgress') || '{}');
+                    userProgress[partKey] = userProgress[partKey] || {};
+
+                    // Cập nhật trạng thái bài học hiện tại thành 'completed'
+                    userProgress[partKey][lessonId] = 'completed';
+
+                    // Tìm bài học tiếp theo để mở khóa
+                    const partData = { lessons: [] }; // Khởi tạo với cấu trúc rỗng
+                    // Lỗi ở đây nếu loadLessonDataForPart() thất bại.
+                    // Cần đảm bảo partData được tải thành công
+                    // Hoặc truyền partData từ initializeLesson() xuống
+                    // Để đơn giản, sẽ fetch lại data.
+                    loadLessonDataForPart(partKey).then(fetchedPartData => {
+                        if (fetchedPartData && fetchedPartData.lessons) {
+                            const currentLessonIndex = fetchedPartData.lessons.findIndex(l => l.id === lessonId);
+                            if (currentLessonIndex !== -1 && currentLessonIndex < fetchedPartData.lessons.length - 1) {
+                                const nextLesson = fetchedPartData.lessons[currentLessonIndex + 1];
+                                // Nếu bài tiếp theo đang là 'locked', thì đặt nó thành 'current'
+                                if (userProgress[partKey][nextLesson.id] !== 'completed') { // Chỉ cập nhật nếu chưa hoàn thành
+                                    userProgress[partKey][nextLesson.id] = 'current';
+                                }
+                            }
+                        }
+                        // Lưu lại tiến độ đã cập nhật vào localStorage sau khi đã xử lý next lesson
+                        localStorage.setItem('userProgress', JSON.stringify(userProgress));
+                    });
+                    // ==============================================
+
                     lessonContentArea.innerHTML = `
                         <div class="exercise-block summary">
                             <h2>Bài học hoàn thành!</h2>
@@ -274,126 +187,28 @@
                 const exerciseBlock = document.createElement('div');
                 exerciseBlock.classList.add('exercise-block');
 
-                // Xóa mọi onclick cũ trên nút tiếp tục để tránh sự kiện chồng chéo
-                continueButton.onclick = null; 
+                // Luôn reset onclick handler
+                continueButton.onclick = null;
 
-                if (section.type === 'word-of-god-display') {
-                    exerciseBlock.classList.add('word-of-god-display');
-                    const pContent = document.createElement('p');
-                    pContent.textContent = section.content;
-                    exerciseBlock.appendChild(pContent);
-                    const pDesc = document.createElement('p');
-                    pDesc.textContent = section.desc;
-                    pDesc.style.fontSize = '0.9em';
-                    exerciseBlock.appendChild(pDesc);
-                    continueButton.disabled = false;
-                    continueButton.onclick = moveToNextSection;
-                } else if (section.type === 'multiple-choice') {
-                    const h2 = document.createElement('h2');
-                    h2.textContent = section.question;
-                    exerciseBlock.appendChild(h2);
-
-                    const optionsGrid = document.createElement('div');
-                    optionsGrid.classList.add('options-grid');
-                    let selectedOption = null; // Biến cục bộ để theo dõi lựa chọn hiện tại
-
-                    section.options.forEach((option, idx) => {
-                        const optionCard = document.createElement('div');
-                        optionCard.classList.add('option-card');
-                        optionCard.textContent = option.text;
-                        optionCard.dataset.index = idx;
-                        optionCard.addEventListener('click', () => {
-                            if (continueButton.onclick === moveToNextSection) return; // Không cho chọn lại sau khi kiểm tra
-                            
-                            // Xóa lựa chọn cũ
-                            if (selectedOption) {
-                                selectedOption.classList.remove('selected');
-                            }
-                            // Chọn lựa chọn mới
-                            optionCard.classList.add('selected');
-                            selectedOption = optionCard;
-                            continueButton.disabled = false;
-                            
-                            // Gán lại onclick cho nút "TIẾP TỤC" để kiểm tra đáp án
-                            continueButton.onclick = () => {
-                                if (section.options[parseInt(selectedOption.dataset.index)].correct) {
-                                    selectedOption.classList.add('correct');
-                                    showFeedback(section.feedback_correct, true);
-                                    xpGained += 10;
-                                    xpDisplay.textContent = `+10 XP`;
-                                } else {
-                                    selectedOption.classList.add('incorrect');
-                                    const correctOption = optionsGrid.querySelector('.option-card[data-index="' + section.options.findIndex(opt => opt.correct) + '"]');
-                                    if (correctOption) correctOption.classList.add('correct');
-                                    showFeedback(section.feedback_incorrect, false);
-                                }
-                                continueButton.onclick = moveToNextSection; // Sau khi kiểm tra, chuyển sang hàm chuyển section
-                                optionsGrid.querySelectorAll('.option-card').forEach(card => card.style.pointerEvents = 'none'); // Vô hiệu hóa click
-                            };
-                        });
-                        optionsGrid.appendChild(optionCard);
-                    });
-                    exerciseBlock.appendChild(optionsGrid);
-
-                } else if (section.type === 'fill-in-blank') {
-                    const h2 = document.createElement('h2');
-                    h2.textContent = section.question_before;
-                    exerciseBlock.appendChild(h2);
-
-                    const blankContainer = document.createElement('div');
-                    blankContainer.classList.add('fill-in-blank-container');
-                    blankContainer.innerHTML = `${section.blank_start_text}<input type="text" class="fill-in-blank-input" id="blankInput">${section.blank_end_text}`;
-                    exerciseBlock.appendChild(blankContainer);
-
-                    const blankInput = document.getElementById('blankInput');
-                    // Gán sự kiện cho blankInput ngay sau khi nó được tạo và thêm vào DOM
-                    blankInput.addEventListener('input', () => {
-                        continueButton.disabled = blankInput.value.trim() === '';
-                        if (!continueButton.disabled) { // Bật nút, gán sự kiện kiểm tra
-                            continueButton.onclick = () => {
-                                const userAnswer = blankInput.value.trim();
-                                if (userAnswer) {
-                                    if (userAnswer.toLowerCase() === section.blank_correct_answer.toLowerCase()) {
-                                        blankInput.style.borderColor = '#28a745';
-                                        blankInput.style.color = '#155724';
-                                        showFeedback(section.feedback_correct, true);
-                                        xpGained += 10;
-                                        xpDisplay.textContent = `+10 XP`;
-                                    } else {
-                                        blankInput.style.borderColor = '#dc3545';
-                                        blankInput.style.color = '#721c24';
-                                        showFeedback(section.feedback_incorrect, false);
-                                    }
-                                    blankInput.disabled = true;
-                                    continueButton.onclick = moveToNextSection; // Sau khi kiểm tra, chuyển sang hàm chuyển section
-                                } else {
-                                    alert('Vui lòng điền vào chỗ trống.');
-                                }
-                            };
-                        } else { // Vô hiệu hóa nút, xóa sự kiện kiểm tra
-                            continueButton.onclick = null;
-                        }
-                    });
-                    // Đảm bảo nút disabled khi input rỗng lúc ban đầu
-                    continueButton.disabled = blankInput.value.trim() === '';
-
-                } else if (section.type === 'summary') {
-                    const h2 = document.createElement('h2');
-                    h2.textContent = section.title;
-                    exerciseBlock.appendChild(h2);
-                    const p = document.createElement('p');
-                    p.textContent = section.content;
-                    exerciseBlock.appendChild(p);
-                    continueButton.disabled = false;
-                    continueButton.onclick = moveToNextSection;
-                } else {
-                    // Xử lý các type khác nếu có (paragraph, heading3, list)
-                    const h2 = document.createElement('h2');
-                    h2.textContent = section.title || 'Nội dung bài học'; // Tiêu đề mặc định
-                    exerciseBlock.appendChild(h2);
-
-                    // Render nội dung tùy thuộc vào type
-                    if (section.type === 'paragraph') {
+                if (section.type === 'word-of-god-display' || section.type === 'summary' || section.type === 'paragraph' || section.type === 'heading3' || section.type === 'list') {
+                    // Các loại nội dung không yêu cầu tương tác, nút "TIẾP TỤC" sẽ chuyển bài ngay lập tức
+                    if (section.type === 'word-of-god-display') {
+                        exerciseBlock.classList.add('word-of-god-display');
+                        const pContent = document.createElement('p');
+                        pContent.textContent = section.content;
+                        exerciseBlock.appendChild(pContent);
+                        const pDesc = document.createElement('p');
+                        pDesc.textContent = section.desc;
+                        pDesc.style.fontSize = '0.9em';
+                        exerciseBlock.appendChild(pDesc);
+                    } else if (section.type === 'summary') {
+                        const h2 = document.createElement('h2');
+                        h2.textContent = section.title;
+                        exerciseBlock.appendChild(h2);
+                        const p = document.createElement('p');
+                        p.textContent = section.content;
+                        exerciseBlock.appendChild(p);
+                    } else if (section.type === 'paragraph') {
                         const p = document.createElement('p');
                         p.textContent = section.content;
                         exerciseBlock.appendChild(p);
@@ -414,67 +229,372 @@
                          p.textContent = 'Loại nội dung không xác định hoặc thiếu: ' + section.type;
                          exerciseBlock.appendChild(p);
                     }
-                    continueButton.disabled = false;
-                    continueButton.onclick = moveToNextSection;
+
+                    continueButton.disabled = false; // Bật nút "TIẾP TỤC"
+                    continueButton.onclick = moveToNextSection; // Gán chức năng chuyển bài
+                } else if (section.type === 'multiple-choice') {
+                    const h2 = document.createElement('h2');
+                    h2.textContent = section.question;
+                    exerciseBlock.appendChild(h2);
+
+                    const optionsGrid = document.createElement('div');
+                    optionsGrid.classList.add('options-grid');
+                    let selectedOption = null;
+                    let isAnswerChecked = false; // Biến trạng thái để biết đã kiểm tra đáp án chưa
+
+                    section.options.forEach((option, idx) => {
+                        const optionCard = document.createElement('div');
+                        optionCard.classList.add('option-card');
+                        optionCard.textContent = option.text;
+                        optionCard.dataset.index = idx;
+                        optionCard.addEventListener('click', () => {
+                            if (isAnswerChecked) return; // Không cho chọn lại nếu đã kiểm tra đáp án
+
+                            if (selectedOption) {
+                                selectedOption.classList.remove('selected');
+                            }
+                            optionCard.classList.add('selected');
+                            selectedOption = optionCard;
+                            continueButton.disabled = false; // Bật nút "TIẾP TỤC"
+                        });
+                        optionsGrid.appendChild(optionCard);
+                    });
+                    exerciseBlock.appendChild(optionsGrid);
+
+                    // Xử lý click cho nút "TIẾP TỤC"
+                    continueButton.onclick = () => {
+                        if (isAnswerChecked) {
+                            // Nếu đã kiểm tra đáp án, lần click tiếp theo sẽ chuyển bài
+                            moveToNextSection();
+                        } else {
+                            // Lần click đầu tiên: kiểm tra đáp án
+                            if (!selectedOption) {
+                                alert('Vui lòng chọn một đáp án.');
+                                return;
+                            }
+                            isAnswerChecked = true; // Đánh dấu đã kiểm tra
+
+                            if (section.options[parseInt(selectedOption.dataset.index)].correct) {
+                                selectedOption.classList.add('correct');
+                                showFeedback(section.feedback_correct, true);
+                                xpGained += 10;
+                                xpDisplay.textContent = `+10 XP`;
+                            } else {
+                                selectedOption.classList.add('incorrect');
+                                const correctOption = optionsGrid.querySelector('.option-card[data-index="' + section.options.findIndex(opt => opt.correct) + '"]');
+                                if (correctOption) correctOption.classList.add('correct');
+                                showFeedback(section.feedback_incorrect, false);
+                            }
+                            // Vô hiệu hóa việc click lại các lựa chọn
+                            optionsGrid.querySelectorAll('.option-card').forEach(card => card.style.pointerEvents = 'none');
+                            // Nút "TIẾP TỤC" vẫn bật, lần click tiếp theo sẽ là moveToNextSection
+                        }
+                    };
+
+                } else if (section.type === 'fill-in-blank') {
+                    const h2 = document.createElement('h2');
+                    h2.textContent = section.question_before;
+                    exerciseBlock.appendChild(h2);
+
+                    const blankContainer = document.createElement('div');
+                    blankContainer.classList.add('fill-in-blank-container');
+
+                    // Tạo các phần văn bản và input riêng biệt để tránh lỗi getElementById
+                    const spanStart = document.createElement('span');
+                    spanStart.textContent = section.blank_start_text;
+                    blankContainer.appendChild(spanStart);
+
+                    const blankInput = document.createElement('input');
+                    blankInput.type = "text";
+                    blankInput.classList.add('fill-in-blank-input');
+                    blankInput.id = "blankInput"; // Giữ ID nếu cần tham chiếu từ bên ngoài
+                    blankContainer.appendChild(blankInput);
+
+                    const spanEnd = document.createElement('span');
+                    spanEnd.textContent = section.blank_end_text;
+                    blankContainer.appendChild(spanEnd);
+                    
+                    exerciseBlock.appendChild(blankContainer); // Thêm blankContainer vào exerciseBlock
+
+                    let isAnswerChecked = false; // Biến trạng thái để biết đã kiểm tra đáp án chưa
+
+                    blankInput.addEventListener('input', () => {
+                        // Nút "TIẾP TỤC" sẽ được bật nếu có chữ trong ô input, ngược lại thì tắt
+                        continueButton.disabled = blankInput.value.trim() === '';
+                    });
+
+                    // Xử lý click cho nút "TIẾP TỤC"
+                    continueButton.onclick = () => {
+                        if (isAnswerChecked) {
+                            // Nếu đã kiểm tra đáp án, lần click tiếp theo sẽ chuyển bài
+                            moveToNextSection();
+                        } else {
+                            // Lần click đầu tiên: kiểm tra đáp án
+                            const userAnswer = blankInput.value.trim();
+                            if (!userAnswer) {
+                                alert('Vui lòng điền vào chỗ trống.');
+                                return; // Không làm gì nếu ô trống
+                            }
+                            isAnswerChecked = true; // Đánh dấu đã kiểm tra
+
+                            if (userAnswer.toLowerCase() === section.blank_correct_answer.toLowerCase()) {
+                                blankInput.style.borderColor = '#28a745';
+                                blankInput.style.color = '#155724';
+                                showFeedback(section.feedback_correct, true);
+                                xpGained += 10;
+                                xpDisplay.textContent = `+10 XP`;
+                            } else {
+                                blankInput.style.borderColor = '#dc3545';
+                                blankInput.style.color = '#721c24';
+                                showFeedback(section.feedback_incorrect, false);
+                            }
+                            blankInput.disabled = true; // Vô hiệu hóa input sau khi trả lời
+                            // Nút "TIẾP TỤC" vẫn bật, lần click tiếp theo sẽ là moveToNextSection
+                        }
+                    };
+                    // Đảm bảo nút disabled khi input rỗng lúc ban đầu
+                    continueButton.disabled = blankInput.value.trim() === '';
+                } else if (section.type === 'drag-and-drop') {
+                    const h2 = document.createElement('h2');
+                    h2.textContent = section.question;
+                    exerciseBlock.appendChild(h2);
+
+                    const dragDropContainer = document.createElement('div');
+                    dragDropContainer.classList.add('drag-drop-container');
+
+                    const sentenceElement = document.createElement('div');
+                    sentenceElement.classList.add('drag-drop-sentence');
+                    dragDropContainer.appendChild(sentenceElement);
+
+                    const blankSlots = {}; // Để lưu trữ các blank slot theo ID
+                    const draggableWordsInBank = {}; // Để lưu trữ các từ trong ngân hàng từ theo nội dung
+
+                    // Render câu và chỗ trống
+                    section.sentence_parts.forEach(part => {
+                        if (part.is_blank) {
+                            const blankSlot = document.createElement('div');
+                            blankSlot.classList.add('blank-slot');
+                            blankSlot.dataset.blankId = part.blank_id;
+                            blankSlot.dataset.correctWord = part.correct_word;
+                            blankSlot.textContent = "___"; // Placeholder text
+                            blankSlot.addEventListener('dragover', (e) => {
+                                e.preventDefault(); // Cho phép thả
+                                if (!blankSlot.querySelector('.dropped-word')) { // Chỉ cho phép drag-over nếu slot trống
+                                    blankSlot.classList.add('drag-over');
+                                }
+                            });
+                            blankSlot.addEventListener('dragleave', () => {
+                                blankSlot.classList.remove('drag-over');
+                            });
+                            blankSlot.addEventListener('drop', (e) => {
+                                e.preventDefault();
+                                blankSlot.classList.remove('drag-over');
+                                if (blankSlot.querySelector('.dropped-word')) {
+                                    // Nếu đã có từ, không làm gì hoặc trả về từ cũ
+                                    return;
+                                }
+                                const draggedWordText = e.dataTransfer.getData('text/plain');
+                                const draggedWordElementId = e.dataTransfer.getData('text/elementId'); // Lấy ID của element gốc
+
+                                const originalDraggable = document.getElementById(draggedWordElementId);
+                                if (originalDraggable && originalDraggable.parentNode.classList.contains('word-bank')) {
+                                    // Nếu kéo từ ngân hàng từ, tạo bản sao cho slot
+                                    const droppedWord = document.createElement('span');
+                                    droppedWord.classList.add('dropped-word');
+                                    droppedWord.textContent = draggedWordText;
+                                    droppedWord.draggable = true; // Cho phép kéo ngược lại từ slot
+                                    droppedWord.addEventListener('dragstart', (dragEvent) => {
+                                        dragEvent.dataTransfer.setData('text/plain', draggedWordText);
+                                        dragEvent.dataTransfer.setData('text/elementId', droppedWord.id); // Lấy ID của element này
+                                        // Khi kéo từ slot, đặt cờ để biết là từ slot
+                                        dragEvent.dataTransfer.setData('text/fromSlot', 'true');
+                                        // Ẩn từ đang kéo từ slot
+                                        setTimeout(() => { droppedWord.style.display = 'none'; }, 0);
+                                    });
+                                    droppedWord.addEventListener('dragend', () => {
+                                        if (droppedWord.parentNode === blankSlot && droppedWord.style.display === 'none') {
+                                            // Nếu từ không được thả vào đâu cả hoặc thả vào vị trí không hợp lệ, hiện lại nó
+                                            droppedWord.style.display = '';
+                                        }
+                                    });
+
+                                    blankSlot.innerHTML = ''; // Xóa placeholder text
+                                    blankSlot.appendChild(droppedWord);
+                                    originalDraggable.style.visibility = 'hidden'; // Ẩn từ gốc trong ngân hàng
+                                } else if (originalDraggable && originalDraggable.parentNode.classList.contains('blank-slot')) {
+                                    // Kéo từ slot này sang slot khác
+                                    const previousSlot = originalDraggable.parentNode;
+                                    previousSlot.innerHTML = '___'; // Reset slot cũ
+                                    previousSlot.classList.remove('correct-drop', 'incorrect-drop'); // Xóa trạng thái
+
+                                    blankSlot.innerHTML = ''; // Xóa placeholder text
+                                    blankSlot.appendChild(originalDraggable); // Chuyển từ đến slot mới
+                                    originalDraggable.style.display = ''; // Đảm bảo hiển thị
+                                }
+
+                                updateContinueButtonState(); // Cập nhật trạng thái nút Tiếp tục
+                            });
+                            sentenceElement.appendChild(blankSlot);
+                            blankSlots[part.blank_id] = blankSlot;
+                        } else {
+                            const wordSpan = document.createElement('span');
+                            wordSpan.classList.add('sentence-word');
+                            wordSpan.textContent = part.text;
+                            sentenceElement.appendChild(wordSpan);
+                        }
+                    });
+
+                    const wordBank = document.createElement('div');
+                    wordBank.classList.add('word-bank');
+                    dragDropContainer.appendChild(wordBank);
+
+                    // Render các từ có thể kéo
+                    section.draggable_words.forEach((word, idx) => {
+                        const draggableWord = document.createElement('span');
+                        draggableWord.classList.add('draggable-word');
+                        draggableWord.textContent = word;
+                        draggableWord.draggable = true;
+                        draggableWord.id = `draggable-word-${idx}-${Date.now()}`; // ID duy nhất
+                        draggableWord.addEventListener('dragstart', (e) => {
+                            e.dataTransfer.setData('text/plain', word);
+                            e.dataTransfer.setData('text/elementId', draggableWord.id); // Lưu ID của element gốc
+                            e.dataTransfer.setData('text/fromSlot', 'false'); // Đánh dấu là kéo từ word bank
+                            setTimeout(() => { draggableWord.classList.add('dragging'); }, 0); // Thêm class kéo
+                        });
+                        draggableWord.addEventListener('dragend', () => {
+                            draggableWord.classList.remove('dragging');
+                        });
+                        wordBank.appendChild(draggableWord);
+                        draggableWordsInBank[word] = draggableWord; // Lưu tham chiếu
+                    });
+
+                    exerciseBlock.appendChild(dragDropContainer);
+
+                    let isAnswerChecked = false; // Biến trạng thái để biết đã kiểm tra đáp án chưa
+
+                    // Hàm kiểm tra trạng thái nút Tiếp tục cho kéo thả
+                    function updateContinueButtonState() {
+                        let allBlanksFilled = true;
+                        for (const key in blankSlots) {
+                            if (!blankSlots[key].querySelector('.dropped-word')) {
+                                allBlanksFilled = false;
+                                break;
+                            }
+                        }
+                        continueButton.disabled = !allBlanksFilled;
+                    }
+
+                    // Xử lý click cho nút "TIẾP TỤC"
+                    continueButton.onclick = () => {
+                        if (isAnswerChecked) {
+                            moveToNextSection();
+                        } else {
+                            let allCorrect = true;
+                            // Kiểm tra các chỗ trống
+                            for (const key in blankSlots) {
+                                const blankSlot = blankSlots[key];
+                                const droppedWordElement = blankSlot.querySelector('.dropped-word');
+                                blankSlot.classList.remove('correct-drop', 'incorrect-drop');
+
+                                if (!droppedWordElement || droppedWordElement.textContent !== blankSlot.dataset.correctWord) {
+                                    allCorrect = false;
+                                    if (droppedWordElement) {
+                                        droppedWordElement.classList.add('incorrect-animation');
+                                        setTimeout(() => droppedWordElement.classList.remove('incorrect-animation'), 500);
+                                    }
+                                    blankSlot.classList.add('incorrect-drop');
+                                } else {
+                                    blankSlot.classList.add('correct-drop');
+                                }
+                            }
+
+                            isAnswerChecked = true; // Đánh dấu đã kiểm tra
+
+                            if (allCorrect) {
+                                showFeedback(section.feedback_correct, true);
+                                xpGained += 10;
+                                xpDisplay.textContent = `+10 XP`;
+                                // Vô hiệu hóa kéo thả sau khi đúng
+                                wordBank.querySelectorAll('.draggable-word').forEach(word => word.style.pointerEvents = 'none');
+                                Object.values(blankSlots).forEach(slot => slot.style.pointerEvents = 'none');
+
+                            } else {
+                                showFeedback(section.feedback_incorrect, false);
+                                // Cho phép kéo lại và sửa nếu sai
+                                isAnswerChecked = false; // Đặt lại để người dùng có thể sửa và kiểm tra lại
+                                Object.values(blankSlots).forEach(slot => {
+                                    if (slot.classList.contains('incorrect-drop')) {
+                                        const droppedWord = slot.querySelector('.dropped-word');
+                                        if (droppedWord) {
+                                            // Đưa từ về lại word bank
+                                            const originalWordInBank = draggableWordsInBank[droppedWord.textContent];
+                                            if (originalWordInBank) {
+                                                originalWordInBank.style.visibility = 'visible';
+                                            }
+                                            slot.innerHTML = '___'; // Xóa từ khỏi slot
+                                            slot.classList.remove('incorrect-drop');
+                                        }
+                                    }
+                                });
+                                updateContinueButtonState(); // Cập nhật lại trạng thái nút
+                            }
+                        }
+                    };
+
+                    // Khởi tạo trạng thái nút
+                    updateContinueButtonState();
                 }
                 
                 lessonContentArea.appendChild(exerciseBlock);
             }
 
             // Khởi tạo bài học
-            const urlParams = new URLSearchParams(window.location.search);
-            const part = urlParams.get('part');
-            const classNum = urlParams.get('class');
-            const lessonId = urlParams.get('lesson');
+            async function initializeLesson() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const part = urlParams.get('part');
+                const classNum = urlParams.get('class');
+                const lessonId = urlParams.get('lesson');
 
-            // --- Console logging để debug ---
-            console.log("Loading lesson-detail.html...");
-            console.log("Part:", part);
-            console.log("Class Num:", classNum);
-            console.log("Lesson ID:", lessonId);
-            // --- End Console logging ---
+                if (part && classNum && lessonId) {
+                    const partData = await loadLessonDataForPart(part); // Tải dữ liệu của phần
+                    if (partData) {
+                        currentPartName = partData.name; // Lưu tên phần học
+                        const currentLesson = partData.lessons.find(l => l.id === lessonId); // Tìm bài học
+                        if (currentLesson) {
+                            lessonPageTitle.textContent = currentLesson.title;
+                            lessonMainTitle.textContent = `${currentPartName} Lớp ${classNum}`;
+                            lessonSubTitle.textContent = currentLesson.title;
+                            currentLessonSections = currentLesson.sections;
 
-            if (part && classNum && lessonId) {
-                const partContent = allLessonsContent[part];
-                if (partContent) {
-                    const currentLesson = partContent[lessonId];
-                    if (currentLesson) {
-                        const partDisplayName = globalLessonStructure[part]?.name || 'Chưa xác định';
-                        lessonPageTitle.textContent = currentLesson.title;
-                        lessonMainTitle.textContent = `${partDisplayName} Lớp ${classNum}`;
-                        lessonSubTitle.textContent = currentLesson.title;
-                        currentLessonSections = currentLesson.sections;
+                            if (currentLessonSections && currentLessonSections.length > 0) {
+                                 renderCurrentSection();
+                            } else {
+                                lessonContentArea.innerHTML = `<p>Bài học này chưa có nội dung. Vui lòng quay lại.</p>`;
+                                continueButton.style.display = 'none';
+                            }
 
-                        // --- Console logging dữ liệu bài học ---
-                        console.log("Current Lesson Data:", currentLesson);
-                        console.log("Sections to render:", currentLessonSections);
-                        // --- End Console logging ---
-
-                        if (currentLessonSections && currentLessonSections.length > 0) {
-                             renderCurrentSection(); // Bắt đầu render bài tập đầu tiên
                         } else {
-                            lessonContentArea.innerHTML = `<p>Bài học này chưa có nội dung. Vui lòng quay lại.</p>`;
+                            lessonMainTitle.textContent = "Bài học không tìm thấy";
+                            lessonSubTitle.textContent = "";
+                            lessonContentArea.innerHTML = `<p>Không tìm thấy nội dung bài học này. Vui lòng quay lại.</p>`;
                             continueButton.style.display = 'none';
                         }
-                       
                     } else {
-                        lessonMainTitle.textContent = "Bài học không tìm thấy";
+                        lessonMainTitle.textContent = "Phần học không tìm thấy";
                         lessonSubTitle.textContent = "";
-                        lessonContentArea.innerHTML = `<p>Không tìm thấy nội dung bài học này. Vui lòng quay lại.</p>`;
+                        lessonContentArea.innerHTML = `<p>Phần học bạn chọn không hợp lệ hoặc dữ liệu không tải được. Vui lòng quay lại.</p>`;
                         continueButton.style.display = 'none';
                     }
                 } else {
-                    lessonMainTitle.textContent = "Phần học không tìm thấy";
+                    lessonMainTitle.textContent = "Không có bài học được chọn";
                     lessonSubTitle.textContent = "";
-                    lessonContentArea.innerHTML = `<p>Phần học bạn chọn không hợp lệ. Vui lòng quay lại.</p>`;
+                    lessonContentArea.innerHTML = `<p>Bạn chưa chọn bài học nào. Vui lòng quay lại con đường học tập.</p>`;
                     continueButton.style.display = 'none';
                 }
-            } else {
-                lessonMainTitle.textContent = "Không có bài học được chọn";
-                lessonSubTitle.textContent = "";
-                lessonContentArea.innerHTML = `<p>Bạn chưa chọn bài học nào. Vui lòng quay lại con đường học tập.</p>`;
-                continueButton.style.display = 'none';
             }
+
+            // Bắt đầu khởi tạo bài học khi trang được tải
+            initializeLesson();
         });
     </script>
 </body>
