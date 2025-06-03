@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn Phần Học</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS riêng cho trang landau.html - Giao diện chọn thẻ */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .logo {
+            color: #58CC02;
+            font-weight: 700;
+            font-size: 30px;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 30px;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        .selection-grid.hidden {
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            position: absolute;
+        }
+        .selection-grid.visible {
+            opacity: 1;
+            transform: translateY(0);
+            position: static;
+        }
+        /* Đảm bảo chỉ có một grid hiển thị cùng lúc */
+        .selection-grid:not(.visible) {
+            display: none;
+        }
+        .selection-grid.visible {
+             display: grid;
+        }
+
+
+        .selection-card {
+            background-color: #ffffff;
+            border: 2px solid #dbd8d8;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease, transform 0.1s ease-out; /* Điều chỉnh transition cho card */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 120px;
+        }
+
+        .selection-card:hover {
+            background-color: #f5f5f5;
+            border-color: #c0c0c0;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Hiệu ứng khi thẻ phần học được chọn */
+        .selection-card.part-selected-effect {
+            transform: scale(1.05) translateY(-5px); /* Nổi lên và to hơn một chút */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            /* Đảm bảo transition cho các thuộc tính thay đổi khi có hiệu ứng */
+            transition: transform 0.1s ease-out, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        /* Hiệu ứng cho TEXT bên trong thẻ khi thẻ có hiệu ứng */
+        .selection-card.part-selected-effect .card-text {
+            transform: scale(1.02); /* Làm chữ to ra một chút */
+            transition: transform 0.1s ease-out; /* Thêm transition cho chữ */
+        }
+
+        /* Màu sắc cho các thẻ khi được chọn */
+        .selection-card.selected-xung-toi {
+            background-color: #58CC02; /* Xanh lá */
+            border-color: #58CC02;
+            color: white; /* Chữ trắng */
+        }
+        .selection-card.selected-them-suc {
+            background-color: #3498db; /* Xanh dương */
+            border-color: #3498db;
+            color: white;
+        }
+        .selection-card.selected-song-dao {
+            background-color: #f1c40f; /* Vàng */
+            border-color: #f1c40f;
+            color: #333; /* Chữ tối để nổi bật trên nền vàng */
+        }
+        /* Màu chữ cho thẻ được chọn */
+        .selection-card.selected-xung-toi .card-text,
+        .selection-card.selected-them-suc .card-text {
+            color: white; /* Chữ trắng cho xanh lá và xanh dương */
+        }
+        .selection-card.selected-song-dao .card-text {
+            color: #333; /* Chữ đen cho vàng */
+        }
+
+
+        /* Màu chữ ban đầu của các thẻ phần học */
+        .selection-card[data-value="xung-toi"] .card-text {
+            color: #58CC02; /* Xanh lá */
+        }
+        .selection-card[data-value="them-suc"] .card-text {
+            color: #3498db; /* Xanh dương */
+        }
+        .selection-card[data-value="song-dao"] .card-text {
+            color: #f1c40f; /* Vàng */
+        }
+        /* Đảm bảo chữ đen khi hover các thẻ phần học ban đầu */
+        .selection-card:not(.selected-xung-toi):not(.selected-them-suc):not(.selected-song-dao):hover .card-text {
+            color: #333; /* Chữ đen khi hover (khi chưa được chọn) */
+        }
+
+
+        /* Ẩn icon ảnh cho phần học (nếu có, nhưng giờ đã xóa thẻ img) */
+        .part-card .card-icon-img {
+            display: none;
+        }
+
+        .card-text {
+            font-size: 1.1em;
+            font-weight: 700;
+            /* Thêm transition cho text để nó cũng mượt mà khi thay đổi */
+            transition: color 0.2s ease, transform 0.1s ease-out; 
+        }
+        
+        /* Nút Bắt đầu học */
+        .start-learning-btn {
+            background-color: #58CC02;
+            color: white;
+            padding: 15px 50px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .start-learning-btn:hover {
+            background-color: #4CAF50;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 rgba(0,0,0,0.25);
+        }
+
+        .start-learning-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        }
+
+        .start-learning-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+            color: #666;
+        }
+
+        /* Nút Quay lại */
+        .back-button {
+            background-color: #ddd;
+            color: #555;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            position: fixed; 
+            left: 20px; 
+            top: 20px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 100; 
+        }
+
+        .back-button:hover {
+            background-color: #ccc;
+        }
+
+        .back-button.hidden {
+            display: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .selection-grid {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 30px;
+            }
+            .logo {
+                font-size: 26px;
+            }
+            .start-learning-btn {
+                padding: 12px 40px;
+                font-size: 1.1em;
+            }
+            .back-button {
+                left: 15px;
+                top: 15px;
+                width: 35px;
+                height: 35px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button hidden" id="backButton">←</button>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">GiaoLy</a>
+    </nav>
+
+    <div class="main-container">
+        <h1 id="selectionTitle">Bạn muốn học phần nào?</h1>
+        
+        <div class="selection-grid visible" id="partSelectionGrid">
+            <div class="selection-card" data-value="xung-toi">
+                <div class="card-text">Xưng Tội</div>
+            </div>
+            <div class="selection-card" data-value="them-suc">
+                <div class="card-text">Thêm Sức</div>
+            </div>
+            <div class="selection-card" data-value="song-dao">
+                <div class="card-text">Sống Đạo</div>
+            </div>
+        </div>
+
+        <div class="selection-grid hidden" id="classSelectionGrid">
+            </div>
+
+        <button class="start-learning-btn" id="startLearningBtn" disabled>TIẾP TỤC</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectionTitle = document.getElementById('selectionTitle');
+            const partSelectionGrid = document.getElementById('partSelectionGrid');
+            const classSelectionGrid = document.getElementById('classSelectionGrid');
+            const startLearningBtn = document.getElementById('startLearningBtn');
+            const backButton = document.getElementById('backButton');
+
+            let selectedPart = null;
+            let selectedClass = null;
+
+            const classesData = {
+                'xung-toi': ['Xưng Tội 1', 'Xưng Tội 2', 'Xưng Tội 3'],
+                'them-suc': ['Thêm Sức 1', 'Thêm Sức 2', 'Thêm Sức 3'],
+                'song-dao': ['Sống Đạo 1', 'Sống Đạo 2', 'Sống Đạo 3']
+            };
+
+            const partColors = {
+                'xung-toi': 'selected-xung-toi',
+                'them-suc': 'selected-them-suc',
+                'song-dao': 'selected-song-dao'
+            };
+
+            function updateStartButtonState() {
+                if (selectedPart && selectedClass) {
+                    startLearningBtn.disabled = false;
+                    startLearningBtn.textContent = 'TIẾP TỤC';
+                } else if (selectedPart && !selectedClass) {
+                    startLearningBtn.disabled = true;
+                    startLearningBtn.textContent = 'Chọn Lớp';
+                } else {
+                    startLearningBtn.disabled = true;
+                    startLearningBtn.textContent = 'BẮT ĐẦU HỌC';
+                }
+            }
+
+            // Hàm xóa các class màu sắc liên quan đến trạng thái 'selected' và hiệu ứng
+            function clearSelection(container) {
+                container.querySelectorAll('.selection-card').forEach(card => {
+                    card.classList.remove('selected-xung-toi', 'selected-them-suc', 'selected-song-dao', 'part-selected-effect');
+                });
+            }
+
+            // Hàm hiển thị lưới chọn phần học
+            function showPartSelection() {
+                selectionTitle.textContent = 'Bạn muốn học phần nào?';
+                
+                // Ẩn lưới lớp học và hiện lưới phần học
+                classSelectionGrid.classList.remove('visible');
+                classSelectionGrid.classList.add('hidden');
+                
+                partSelectionGrid.classList.remove('hidden');
+                partSelectionGrid.classList.add('visible');
+
+
+                backButton.classList.add('hidden'); // Ẩn nút quay lại
+                selectedPart = null;
+                selectedClass = null;
+                clearSelection(partSelectionGrid); // Xóa các class màu và hiệu ứng khi quay lại màn hình chọn phần học
+                clearSelection(classSelectionGrid);
+                classSelectionGrid.innerHTML = ''; // Dọn dẹp nội dung lưới lớp học
+                updateStartButtonState();
+            }
+
+            // Xử lý chọn Phần học
+            partSelectionGrid.querySelectorAll('.selection-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    clearSelection(partSelectionGrid); // Xóa class màu và hiệu ứng của các thẻ phần học khác
+                    
+                    const value = this.dataset.value;
+                    this.classList.add(partColors[value]); // Thêm class màu tương ứng cho thẻ được chọn
+                    this.classList.add('part-selected-effect'); // Thêm hiệu ứng nổi
+
+                    selectedPart = value;
+
+                    // Sau một khoảng thời gian ngắn, ẩn lưới phần học và hiện lưới lớp học
+                    setTimeout(() => {
+                        partSelectionGrid.classList.remove('visible');
+                        partSelectionGrid.classList.add('hidden'); // Ẩn lưới phần học
+
+                        classSelectionGrid.classList.remove('hidden');
+                        classSelectionGrid.classList.add('visible'); // Hiện lưới lớp học
+                        backButton.classList.remove('hidden'); // Hiện nút quay lại
+
+                        // Reset lớp học khi phần học thay đổi
+                        selectedClass = null;
+                        classSelectionGrid.innerHTML = '';
+                        selectionTitle.textContent = `Bạn muốn học lớp nào?`;
+
+                        populateClassCards(selectedPart);
+                        updateStartButtonState();
+                    }, 300); // 300ms đủ để hiệu ứng nổi diễn ra
+                });
+            });
+
+            // Hàm tạo các thẻ lớp học
+            function populateClassCards(partKey) {
+                const classes = classesData[partKey];
+                classSelectionGrid.innerHTML = '';
+                classes.forEach((className, index) => {
+                    const classCard = document.createElement('div');
+                    classCard.classList.add('selection-card');
+                    classCard.dataset.value = (index + 1);
+                    classCard.innerHTML = `
+                        <div class="card-text">${className}</div>
+                    `;
+                    classSelectionGrid.appendChild(classCard);
+
+                    classCard.addEventListener('click', function() {
+                        clearSelection(classSelectionGrid); // Xóa các class màu của lớp
+                        this.classList.add(partColors[partKey]); // Thêm màu của phần học cha VÀO THẺ ĐƯỢC CHỌN
+                        
+                        selectedClass = this.dataset.value;
+                        updateStartButtonState();
+                    });
+                });
+            }
+
+            // Xử lý nút Quay lại
+            backButton.addEventListener('click', () => {
+                showPartSelection();
+            });
+
+            // Logic chuyển hướng khi nhấn nút TIẾP TỤC
+            startLearningBtn.addEventListener('click', () => {
+                if (selectedPart && selectedClass) {
+                    localStorage.setItem('selectedPart', selectedPart);
+                    localStorage.setItem('selectedClass', selectedClass);
+
+                    window.location.href = `trangchu.html`;
+                }
+            });
+
+            // Kiểm tra và tải lựa chọn đã lưu khi trang được tải
+            const savedPart = localStorage.getItem('selectedPart');
+            const savedClass = localStorage.getItem('selectedClass');
+
+            if (savedPart && savedClass) {
+                window.location.href = `trangchu.html`;
+            } else {
+                showPartSelection(); // Đảm bảo hiển thị màn hình ban đầu đúng cách
+            }
+        });
+    </script>
+</body>
+</html>

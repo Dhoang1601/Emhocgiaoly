@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Con Đường Học Tập - GiaoLy</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet"> <style>
+        /* CSS chung */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background-color: #ffffff; /* Nền trắng */
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+            position: sticky; /* Giữ navbar ở trên cùng khi cuộn */
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            color: #58CC02; /* Xanh lá của Duolingo */
+            font-family: 'Fredoka One', cursive; /* Font giống Duolingo */
+            font-weight: 700;
+            font-size: 30px;
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Căn giữa các bài học theo chiều ngang */
+            padding: 20px;
+            max-width: 800px; /* Giới hạn chiều rộng để con đường không quá rộng */
+            margin: 0 auto;
+            position: relative; /* Cho các phần tử con absolute */
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        /* Nút quay lại (Fixed position, vẫn như trước) */
+        .back-button {
+            background-color: #ddd;
+            color: #555;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            position: fixed; 
+            left: 20px; 
+            top: 20px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 100; 
+        }
+
+        .back-button:hover {
+            background-color: #ccc;
+        }
+        .back-button.hidden {
+            display: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .logo {
+                font-size: 26px;
+            }
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            .back-button {
+                left: 15px;
+                top: 15px;
+                width: 35px;
+                height: 35px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" id="backButton">←</button>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo">GiaoLy</a>
+    </nav>
+
+    <div class="main-container">
+        <h1 id="pageTitle">Đang Tải Bài Học...</h1>
+        
+        <div class="learning-path" id="learningPath">
+            </div>
+
+        <button id="startLessonBtn" style="display: none;"></button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pageTitle = document.getElementById('pageTitle');
+            const learningPath = document.getElementById('learningPath');
+            const backButton = document.getElementById('backButton');
+            const startLessonBtnBottom = document.getElementById('startLessonBtn'); // Nút này vẫn tồn tại nhưng sẽ bị ẩn
+
+            const selectedPart = localStorage.getItem('selectedPart');
+            const selectedClass = localStorage.getItem('selectedClass');
+
+            const lessonData = {
+                'xung-toi': {
+                    name: 'Xưng Tội',
+                    lessons: [
+                        { id: 'xt1', title: 'Bài 1: Ý nghĩa của Tội Lỗi', desc: 'Tìm hiểu về bản chất của tội lỗi và hậu quả.', status: 'completed' },
+                        { id: 'xt2', title: 'Bài 2: Hồi tâm sám hối', desc: 'Tìm hiểu về sự ăn năn và sám hối.', status: 'completed' },
+                        { id: 'xt3', title: 'Bài 3: Nghi thức Xưng Tội', desc: 'Quy trình và nghi thức của Bí Tích Giải Tội.', status: 'current' },
+                        { id: 'xt4', title: 'Bài 4: Lợi ích của Bí tích', desc: 'Những lợi ích thiêng liêng của Bí tích Hòa Giải.', status: 'locked' },
+                        { id: 'xt5', title: 'Bài 5: Sống theo Lời Chúa', desc: 'Cách sống một đời sống mới sau khi được tha tội.', status: 'locked' },
+                        { id: 'xt6', title: 'Bài 6: Các Điều Răn Chúa', desc: 'Nghiên cứu sâu hơn về Mười Điều Răn.', status: 'locked' },
+                        { id: 'xt7', title: 'Bài 7: Lương Tâm Và Tự Do', desc: 'Phân biệt thiện ác và ý nghĩa của tự do.', status: 'locked' },
+                        { id: 'xt8', title: 'Bài 8: Examination of Conscience', desc: 'Cách xét mình trước khi xưng tội.', status: 'locked' },
+                        { id: 'xt9', title: 'Bài 9: The Rite of Confession', desc: 'Quy trình và nghi thức Bí Tích Giải Tội.', status: 'locked' },
+                        { id: 'xt10', title: 'Bài 10: Living a Renewed Life', desc: 'Sống một đời sống mới sau Giải Tội.', status: 'locked' }
+                    ]
+                },
+                'them-suc': {
+                    name: 'Thêm Sức',
+                    lessons: [
+                        { id: 'ts1', title: 'Bài 1: Chúa Thánh Thần', desc: 'Tìm hiểu về Ngôi Ba Thiên Chúa.', status: 'completed' },
+                        { id: 'ts2', title: 'Bài 2: Bảy Ơn Chúa Thánh Thần', desc: 'Khám phá các ơn đặc biệt Chúa ban.', status: 'current' },
+                        { id: 'ts3', title: 'Bài 3: Biểu Tượng Chúa Thánh Thần', desc: 'Các biểu tượng của Chúa Thánh Thần.', status: 'locked' },
+                        { id: 'ts4', title: 'Bài 4: Sứ Vụ Của Kitô Hữu', desc: 'Vai trò của người Kitô hữu trong thế giới.', status: 'locked' },
+                        { id: 'ts5', title: 'Bài 5: Bí Tích Thêm Sức', desc: 'Ý nghĩa và nghi thức Bí Tích Thêm Sức.', status: 'locked' },
+                        { id: 'ts6', title: 'Bài 6: Sống Với Ơn Thánh Thần', desc: 'Cách sống và phát triển Ơn Chúa Thánh Thần.', status: 'locked' },
+                        { id: 'ts7', title: 'Bài 7: Prophets and Mission', desc: 'Vai trò của các tiên tri và sứ mệnh của Kitô hữu.', status: 'locked' },
+                        { id: 'ts8', title: 'Bài 8: The Fruits of the Holy Spirit', desc: 'Những hoa trái của Chúa Thánh Thần.', status: 'locked' },
+                        { id: 'ts9', title: 'Bài 9: Serving the Community', desc: 'Phục vụ cộng đồng và truyền giáo.', status: 'locked' }
+                    ]
+                },
+                'song-dao': {
+                    name: 'Sống Đạo',
+                    lessons: [
+                        { id: 'sd1', title: 'Bài 1: Sống Đức Tin', desc: 'Đức tin là gì và làm sao để sống Đức Tin.', status: 'current' },
+                        { id: 'sd2', title: 'Bài 2: Sống Đức Cậy', desc: 'Hy vọng vào Chúa và cuộc sống vĩnh cửu.', status: 'locked' },
+                        { id: 'sd3', title: 'Bài 3: Sống Đức Mến', desc: 'Tình yêu đối với Thiên Chúa và tha nhân.', status: 'locked' },
+                        { id: 'sd4', title: 'Bài 4: Cầu Nguyện', desc: 'Các hình thức và tầm quan trọng của cầu nguyện.', status: 'locked' },
+                        { id: 'sd5', title: 'Bài 5: Các Bí Tích', desc: 'Tìm hiểu về các Bí Tích trong Giáo Hội.', status: 'locked' },
+                        { id: 'sd6', title: 'Bài 6: Phụng Vụ', desc: 'Ý nghĩa và vai trò của Phụng Vụ.', status: 'locked' },
+                        { id: 'sd7', title: 'Bài 7: Social Justice', desc: 'Công bằng xã hội và giáo huấn xã hội của Giáo Hội.', status: 'locked' },
+                        { id: 'sd8', title: 'Bài 8: Stewardship', desc: 'Trách nhiệm quản lý các ơn Chúa ban.', status: 'locked' },
+                        { id: 'sd9', title: 'Bài 9: Evangelization in Daily Life', desc: 'Loan báo Tin Mừng trong đời sống thường ngày.', status: 'locked' }
+                    ]
+                }
+            };
+
+            let activePopup = null; // Biến để theo dõi pop-up đang mở
+
+            // Hàm để đóng pop-up đang mở
+            function closeActivePopup() {
+                if (activePopup) {
+                    activePopup.classList.remove('show');
+                    activePopup.parentNode.classList.remove('has-popup');
+                    activePopup = null;
+                }
+            }
+
+            // Lắng nghe sự kiện click trên toàn bộ body để đóng pop-up khi click ra ngoài
+            document.body.addEventListener('click', (event) => {
+                // Đảm bảo không đóng popup nếu click vào node hoặc popup
+                if (activePopup && !activePopup.contains(event.target) && !event.target.closest('.lesson-node')) {
+                    closeActivePopup();
+                }
+            });
+
+            function renderLearningPath(partKey, classNum) {
+                const partInfo = lessonData[partKey];
+                if (!partInfo) {
+                    pageTitle.textContent = "Không tìm thấy Phần Học";
+                    learningPath.innerHTML = "<p>Phần học bạn chọn không hợp lệ.</p>";
+                    return;
+                }
+
+                pageTitle.textContent = `${partInfo.name} - Lớp ${classNum}`;
+                learningPath.innerHTML = ''; // Xóa nội dung cũ
+
+                partInfo.lessons.forEach((lesson, index) => {
+                    const lessonNodeWrapper = document.createElement('div');
+                    lessonNodeWrapper.classList.add('lesson-node-wrapper');
+
+                    const lessonNode = document.createElement('div');
+                    lessonNode.classList.add('lesson-node');
+                    lessonNode.dataset.lessonId = lesson.id;
+                    lessonNode.dataset.lessonStatus = lesson.status;
+
+                    if (lesson.status === 'current') {
+                        lessonNode.classList.add('current');
+                    } else if (lesson.status === 'completed') {
+                        lessonNode.classList.add('completed');
+                    } else if (lesson.status === 'locked') {
+                        lessonNode.classList.add('locked');
+                    }
+
+                    // Chỉ tạo nodeNumber và nodeText nếu bài học KHÔNG phải là 'completed'
+                    if (lesson.status !== 'completed') {
+                        const nodeNumber = document.createElement('div');
+                        nodeNumber.classList.add('lesson-node-number');
+                        nodeNumber.textContent = index + 1; // Số thứ tự bài học
+                        lessonNode.appendChild(nodeNumber);
+
+                        const nodeText = document.createElement('div');
+                        nodeText.classList.add('lesson-node-text');
+                        nodeText.textContent = lesson.title.split(':')[0].trim(); // Chỉ lấy "Bài X"
+                        lessonNode.appendChild(nodeText);
+                    }
+                    // Nếu là 'completed', các phần tử này sẽ không được tạo,
+                    // và pseudo-element '::after' trong CSS sẽ tự động hiển thị dấu tích.
+
+                    lessonNodeWrapper.appendChild(lessonNode);
+                    
+                    // Tạo pop-up cho mỗi node
+                    const popup = document.createElement('div');
+                    popup.classList.add('lesson-info-popup');
+                    popup.innerHTML = `
+                        <h3>${lesson.title}</h3>
+                        <p>${lesson.desc}</p>
+                        <button class="start-lesson-btn-popup">BẮT ĐẦU</button>
+                    `;
+                    lessonNodeWrapper.appendChild(popup);
+
+                    learningPath.appendChild(lessonNodeWrapper);
+
+                    // Xử lý sự kiện click cho từng node bài học
+                    lessonNode.addEventListener('click', (event) => {
+                        event.stopPropagation(); // Ngăn chặn sự kiện click lan ra body
+
+                        closeActivePopup(); // Đóng pop-up đang mở nếu có
+
+                        if (lesson.status === 'locked') {
+                            alert('Bài học này đang bị khóa. Vui lòng hoàn thành các bài trước.');
+                            return;
+                        }
+                        
+                        // Không hiển thị popup nếu bài đã hoàn thành
+                        if (lesson.status === 'completed') {
+                             // Bạn có thể thêm một thông báo nhẹ hoặc không làm gì
+                             // alert('Bài học này đã hoàn thành!');
+                             return; 
+                        }
+
+
+                        // Hiển thị pop-up cho node này
+                        popup.classList.add('show');
+                        lessonNodeWrapper.classList.add('has-popup');
+                        activePopup = popup;
+
+                        // Đăng ký sự kiện click cho nút "BẮT ĐẦU" trong pop-up
+                        const startBtnPopup = popup.querySelector('.start-lesson-btn-popup');
+                        startBtnPopup.onclick = () => {
+                            localStorage.setItem('currentLessonId', lesson.id);
+                            window.location.href = `lesson-detail.html?part=${partKey}&class=${classNum}&lesson=${lesson.id}`;
+                        };
+                    });
+                });
+
+                // Tự động cuộn đến bài đang học nếu có
+                const currentLessonNode = document.querySelector('.lesson-node.current');
+                if (currentLessonNode) {
+                    currentLessonNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            backButton.addEventListener('click', () => {
+                localStorage.removeItem('selectedPart');
+                localStorage.removeItem('selectedClass');
+                window.location.href = 'landau.html';
+            });
+
+            if (selectedPart && selectedClass) {
+                renderLearningPath(selectedPart, selectedClass);
+            } else {
+                pageTitle.textContent = "Chưa chọn phần học và lớp";
+                learningPath.innerHTML = "<p>Vui lòng <a href='landau.html'>quay lại trang chọn ban đầu</a> để chọn phần học và lớp.</p>";
+                backButton.classList.add('hidden');
+            }
+            
+            // Đảm bảo nút startLessonBtn ở dưới cùng bị ẩn
+            if(startLessonBtnBottom) {
+                startLessonBtnBottom.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

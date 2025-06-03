@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GiaoLy - Học Giáo Lý Vui Vẻ và Hiệu Quả</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS riêng cho trang index.html để đạt giao diện Duolingo */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #ffffff; /* Nền trắng như yêu cầu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Chiếm toàn bộ chiều cao viewport */
+            margin: 0;
+            color: #3C3C3C; /* Màu chữ xám đậm, dễ đọc trên nền trắng */
+            text-align: center;
+            overflow: hidden; /* Ngăn cuộn nếu nội dung lớn hơn màn hình */
+        }
+
+        .welcome-container {
+            max-width: 500px; /* Chiều rộng tối đa cho nội dung chính */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+.logo-text-duolingo {
+    font-size: 3.5em; /* Kích thước chữ logo lớn hơn */
+    font-weight: 700;
+    color: #58CC02; /* Màu xanh lá Duolingo */
+    text-decoration: none;
+    letter-spacing: 1px;
+    
+    /* Các thuộc tính mới để cố định logo */
+    position: fixed; /* Cố định vị trí trên màn hình */
+    top: 20px;       /* Cách lề trên 20px (bạn có thể điều chỉnh) */
+    left: 50%;       /* Bắt đầu từ giữa trang */
+    transform: translateX(-50%); /* Dịch sang trái 50% chiều rộng của chính nó để căn giữa chính xác */
+    width: 100%;     /* Chiếm toàn bộ chiều rộng (để text-align: center có tác dụng) */
+    max-width: 500px; /* Giới hạn chiều rộng tối đa, giống .welcome-container */
+    z-index: 1000;   /* Đảm bảo logo nằm trên các phần tử khác nếu có */
+    /* margin-bottom không cần thiết ở đây nữa vì đã dùng position: fixed */
+}
+
+        .hero-image {
+         width: 20%;           /* Giảm kích thước ảnh */
+         max-width: 75px;     /* Giới hạn tối đa */
+         height: auto;
+         margin-bottom: 40px;
+         display: block;       /* Đảm bảo là block để margin auto hoạt động */
+         margin-left: auto;    /* Căn giữa ngang */
+         margin-right: auto;   /* Căn giữa ngang */
+}
+
+        .welcome-text {
+            font-size: 2.2em; /* Kích thước chữ lớn */
+            font-weight: 700; /* In đậm */
+            margin-bottom: 40px; /* Khoảng cách với nút */
+            line-height: 1.3;
+            color: #3C3C3C; /* Màu chữ tương tự Duolingo */
+        }
+
+        .start-button {
+            display: inline-block;
+            background-color: #58CC02; /* Màu xanh lá cây đậm của Duolingo */
+            color: white;
+            padding: 15px 50px; /* Kích thước nút lớn */
+            border-radius: 12px; /* Bo tròn góc tương tự Duolingo */
+            text-decoration: none;
+            font-size: 1.2em; /* Chữ to hơn */
+            font-weight: 700;
+            text-transform: uppercase; /* Viết hoa */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2); /* Tạo hiệu ứng nút nhấn */
+            border: none;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background-color: #4CAF50; /* Sáng hơn khi hover */
+            transform: translateY(-2px); /* Nhấc nhẹ lên khi hover */
+            box-shadow: 0 6px 0 rgba(0,0,0,0.25);
+        }
+
+        .start-button:active {
+            transform: translateY(2px); /* Ấn xuống khi click */
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .welcome-container {
+                max-width: 90%;
+            }
+            .welcome-text {
+                font-size: 1.8em;
+            }
+            .start-button {
+                padding: 12px 40px;
+                font-size: 1.1em;
+            }
+            .logo-text-duolingo {
+                font-size: 3em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-text {
+                font-size: 1.5em;
+            }
+            .start-button {
+                padding: 10px 30px;
+                font-size: 1em;
+            }
+            .logo-text-duolingo {
+                font-size: 2.5em;
+            }
+            .hero-image {
+                width: 70%;
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <div class="logo-text-duolingo">GiaoLy</div>
+        
+        <img src="image/luce.png" alt="Nhân vật minh họa" class="hero-image">
+        <div class="welcome-text">
+            Học Giáo Lý vui vẻ và hiệu quả!
+        </div>
+        
+        <a href="landau.html" class="start-button">BẮT ĐẦU HỌC</a>
+    </div>
+</body>
+</html>
